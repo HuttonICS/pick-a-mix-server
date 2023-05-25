@@ -36,6 +36,7 @@ public class ViewTrials implements Serializable {
     private String       trialPestIncidence;
     private String       trialSoilHealth;
     private String       trialBiodiversity;
+    private Double       trialCpr;
     private Components[] trialComponents;
 
     public ViewTrials() {}
@@ -53,6 +54,7 @@ public class ViewTrials implements Serializable {
         this.trialPestIncidence = value.trialPestIncidence;
         this.trialSoilHealth = value.trialSoilHealth;
         this.trialBiodiversity = value.trialBiodiversity;
+        this.trialCpr = value.trialCpr;
         this.trialComponents = value.trialComponents;
     }
 
@@ -69,6 +71,7 @@ public class ViewTrials implements Serializable {
         String       trialPestIncidence,
         String       trialSoilHealth,
         String       trialBiodiversity,
+        Double       trialCpr,
         Components[] trialComponents
     ) {
         this.trialId = trialId;
@@ -83,6 +86,7 @@ public class ViewTrials implements Serializable {
         this.trialPestIncidence = trialPestIncidence;
         this.trialSoilHealth = trialSoilHealth;
         this.trialBiodiversity = trialBiodiversity;
+        this.trialCpr = trialCpr;
         this.trialComponents = trialComponents;
     }
 
@@ -102,6 +106,7 @@ public class ViewTrials implements Serializable {
         sb.append(", ").append(trialPestIncidence);
         sb.append(", ").append(trialSoilHealth);
         sb.append(", ").append(trialBiodiversity);
+        sb.append(", ").append(trialCpr);
         sb.append(", ").append(Arrays.toString(trialComponents));
 
         sb.append(")");

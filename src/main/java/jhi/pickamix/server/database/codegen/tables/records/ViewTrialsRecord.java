@@ -10,8 +10,8 @@ import jhi.pickamix.server.database.codegen.tables.ViewTrials;
 import jhi.pickamix.server.database.codegen.tables.pojos.Components;
 
 import org.jooq.Field;
-import org.jooq.Record13;
-import org.jooq.Row13;
+import org.jooq.Record14;
+import org.jooq.Row14;
 import org.jooq.impl.TableRecordImpl;
 
 
@@ -20,7 +20,7 @@ import org.jooq.impl.TableRecordImpl;
  * VIEW
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class ViewTrialsRecord extends TableRecordImpl<ViewTrialsRecord> implements Record13<Integer, String, String, Double, Double, Timestamp, String, String, String, String, String, String, Components[]> {
+public class ViewTrialsRecord extends TableRecordImpl<ViewTrialsRecord> implements Record14<Integer, String, String, Double, Double, Timestamp, String, String, String, String, String, String, Double, Components[]> {
 
     private static final long serialVersionUID = 1L;
 
@@ -193,31 +193,45 @@ public class ViewTrialsRecord extends TableRecordImpl<ViewTrialsRecord> implemen
     }
 
     /**
+     * Setter for <code>pickamix_db.view_trials.trial_cpr</code>.
+     */
+    public void setTrialCpr(Double value) {
+        set(12, value);
+    }
+
+    /**
+     * Getter for <code>pickamix_db.view_trials.trial_cpr</code>.
+     */
+    public Double getTrialCpr() {
+        return (Double) get(12);
+    }
+
+    /**
      * Setter for <code>pickamix_db.view_trials.trial_components</code>.
      */
     public void setTrialComponents(Components[] value) {
-        set(12, value);
+        set(13, value);
     }
 
     /**
      * Getter for <code>pickamix_db.view_trials.trial_components</code>.
      */
     public Components[] getTrialComponents() {
-        return (Components[]) get(12);
+        return (Components[]) get(13);
     }
 
     // -------------------------------------------------------------------------
-    // Record13 type implementation
+    // Record14 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row13<Integer, String, String, Double, Double, Timestamp, String, String, String, String, String, String, Components[]> fieldsRow() {
-        return (Row13) super.fieldsRow();
+    public Row14<Integer, String, String, Double, Double, Timestamp, String, String, String, String, String, String, Double, Components[]> fieldsRow() {
+        return (Row14) super.fieldsRow();
     }
 
     @Override
-    public Row13<Integer, String, String, Double, Double, Timestamp, String, String, String, String, String, String, Components[]> valuesRow() {
-        return (Row13) super.valuesRow();
+    public Row14<Integer, String, String, Double, Double, Timestamp, String, String, String, String, String, String, Double, Components[]> valuesRow() {
+        return (Row14) super.valuesRow();
     }
 
     @Override
@@ -281,7 +295,12 @@ public class ViewTrialsRecord extends TableRecordImpl<ViewTrialsRecord> implemen
     }
 
     @Override
-    public Field<Components[]> field13() {
+    public Field<Double> field13() {
+        return ViewTrials.VIEW_TRIALS.TRIAL_CPR;
+    }
+
+    @Override
+    public Field<Components[]> field14() {
         return ViewTrials.VIEW_TRIALS.TRIAL_COMPONENTS;
     }
 
@@ -346,7 +365,12 @@ public class ViewTrialsRecord extends TableRecordImpl<ViewTrialsRecord> implemen
     }
 
     @Override
-    public Components[] component13() {
+    public Double component13() {
+        return getTrialCpr();
+    }
+
+    @Override
+    public Components[] component14() {
         return getTrialComponents();
     }
 
@@ -411,7 +435,12 @@ public class ViewTrialsRecord extends TableRecordImpl<ViewTrialsRecord> implemen
     }
 
     @Override
-    public Components[] value13() {
+    public Double value13() {
+        return getTrialCpr();
+    }
+
+    @Override
+    public Components[] value14() {
         return getTrialComponents();
     }
 
@@ -488,13 +517,19 @@ public class ViewTrialsRecord extends TableRecordImpl<ViewTrialsRecord> implemen
     }
 
     @Override
-    public ViewTrialsRecord value13(Components[] value) {
+    public ViewTrialsRecord value13(Double value) {
+        setTrialCpr(value);
+        return this;
+    }
+
+    @Override
+    public ViewTrialsRecord value14(Components[] value) {
         setTrialComponents(value);
         return this;
     }
 
     @Override
-    public ViewTrialsRecord values(Integer value1, String value2, String value3, Double value4, Double value5, Timestamp value6, String value7, String value8, String value9, String value10, String value11, String value12, Components[] value13) {
+    public ViewTrialsRecord values(Integer value1, String value2, String value3, Double value4, Double value5, Timestamp value6, String value7, String value8, String value9, String value10, String value11, String value12, Double value13, Components[] value14) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -508,6 +543,7 @@ public class ViewTrialsRecord extends TableRecordImpl<ViewTrialsRecord> implemen
         value11(value11);
         value12(value12);
         value13(value13);
+        value14(value14);
         return this;
     }
 
@@ -525,7 +561,7 @@ public class ViewTrialsRecord extends TableRecordImpl<ViewTrialsRecord> implemen
     /**
      * Create a detached, initialised ViewTrialsRecord
      */
-    public ViewTrialsRecord(Integer trialId, String trialName, String trialDescription, Double trialLatitude, Double trialLongitude, Timestamp trialCreatedOn, String trialFarmManagement, String trialWeedIncidence, String trialDiseaseIncidence, String trialPestIncidence, String trialSoilHealth, String trialBiodiversity, Components[] trialComponents) {
+    public ViewTrialsRecord(Integer trialId, String trialName, String trialDescription, Double trialLatitude, Double trialLongitude, Timestamp trialCreatedOn, String trialFarmManagement, String trialWeedIncidence, String trialDiseaseIncidence, String trialPestIncidence, String trialSoilHealth, String trialBiodiversity, Double trialCpr, Components[] trialComponents) {
         super(ViewTrials.VIEW_TRIALS);
 
         setTrialId(trialId);
@@ -540,6 +576,7 @@ public class ViewTrialsRecord extends TableRecordImpl<ViewTrialsRecord> implemen
         setTrialPestIncidence(trialPestIncidence);
         setTrialSoilHealth(trialSoilHealth);
         setTrialBiodiversity(trialBiodiversity);
+        setTrialCpr(trialCpr);
         setTrialComponents(trialComponents);
     }
 
@@ -562,6 +599,7 @@ public class ViewTrialsRecord extends TableRecordImpl<ViewTrialsRecord> implemen
             setTrialPestIncidence(value.getTrialPestIncidence());
             setTrialSoilHealth(value.getTrialSoilHealth());
             setTrialBiodiversity(value.getTrialBiodiversity());
+            setTrialCpr(value.getTrialCpr());
             setTrialComponents(value.getTrialComponents());
         }
     }

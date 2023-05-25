@@ -124,6 +124,9 @@ public class SpreadsheetImporter
 						overallPlot.setCreatedOn(new Timestamp(submissionDate.getTime()));
 						overallPlot.store();
 
+						double denominator = 0;
+						int validCount = 0;
+
 						for (int comp = 1; comp <= componentCount; comp++)
 						{
 							String crop = getOptional(row.getCell(hm.get("Component " + comp + " of " + componentCount)));
@@ -185,6 +188,11 @@ public class SpreadsheetImporter
 							Double yieldMono = getDouble(row.getCell(hm.get("Monoculture yield t/ha - component " + comp + " of " + componentCount)));
 							Double yieldMix = getDouble(row.getCell(hm.get("Mixture yield - t/ha- component " + comp + " of " + componentCount)));
 
+							if (yieldMono != null && sowingRateMix != null && sowingRateMono != null) {
+								validCount++;
+								denominator += (sowingRateMix / sowingRateMono) * yieldMono;
+							}
+
 							writePlotMeasureDate(context, monoPlot, dbMeasures.get("Sowing date"), sowingDateMono);
 							writePlotMeasureDate(context, monoPlot, dbMeasures.get("Harvest date"), harvestDateMono);
 							writePlotMeasure(context, monoPlot, dbMeasures.get("Crop purpose"), cropPurpose);
@@ -210,6 +218,11 @@ public class SpreadsheetImporter
 						String insectControl = getOptional(row.getCell(hm.get("Have you applied chemicals for Insect Control - mixture " + componentCount + " components.")));
 						String diseaseControl = getOptional(row.getCell(hm.get("Have you applied chemicals for Disease Control - mixture " + componentCount + " components.")));
 						Double yield = getDouble(row.getCell(hm.get("Total mixture yield t/ha - " + componentCount + " components")));
+
+						if (yield != null && denominator != 0 && validCount == componentCount) {
+							trial.setCpr(yield / denominator);
+							trial.store(TRIALS.CPR);
+						}
 
 						writePlotMeasureDate(context, overallPlot, dbMeasures.get("Harvest date"), harvestDate);
 						writePlotMeasure(context, overallPlot, dbMeasures.get("Crop purpose"), cropPurpose);

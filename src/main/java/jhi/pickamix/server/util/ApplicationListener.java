@@ -23,7 +23,6 @@ public class ApplicationListener implements ServletContextListener
 		PropertyWatcher.initialize();
 
 		backgroundScheduler = Executors.newSingleThreadScheduledExecutor();
-		// Run the importer at least once a day. It will also be triggered by form submissions
 	}
 
 	@Override

@@ -13,7 +13,7 @@ import jhi.pickamix.server.database.codegen.tables.records.ViewTrialsRecord;
 
 import org.jooq.Field;
 import org.jooq.Name;
-import org.jooq.Row13;
+import org.jooq.Row14;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -106,6 +106,11 @@ public class ViewTrials extends TableImpl<ViewTrialsRecord> {
     public final TableField<ViewTrialsRecord, String> TRIAL_BIODIVERSITY = createField(DSL.name("trial_biodiversity"), SQLDataType.VARCHAR(255), this, "");
 
     /**
+     * The column <code>pickamix_db.view_trials.trial_cpr</code>.
+     */
+    public final TableField<ViewTrialsRecord, Double> TRIAL_CPR = createField(DSL.name("trial_cpr"), SQLDataType.DOUBLE, this, "");
+
+    /**
      * The column <code>pickamix_db.view_trials.trial_components</code>.
      */
     public final TableField<ViewTrialsRecord, Components[]> TRIAL_COMPONENTS = createField(DSL.name("trial_components"), SQLDataType.JSON, this, "", new TrialComponentBinding());
@@ -115,7 +120,7 @@ public class ViewTrials extends TableImpl<ViewTrialsRecord> {
     }
 
     private ViewTrials(Name alias, Table<ViewTrialsRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("VIEW"), TableOptions.view("create view `view_trials` as select `pick_a_mix`.`trials`.`id` AS `trial_id`,`pick_a_mix`.`trials`.`name` AS `trial_name`,`pick_a_mix`.`trials`.`description` AS `trial_description`,`pick_a_mix`.`trials`.`latitude` AS `trial_latitude`,`pick_a_mix`.`trials`.`longitude` AS `trial_longitude`,`pick_a_mix`.`trials`.`created_on` AS `trial_created_on`,`pick_a_mix`.`trials`.`farm_management` AS `trial_farm_management`,`pick_a_mix`.`trials`.`weed_incidence` AS `trial_weed_incidence`,`pick_a_mix`.`trials`.`disease_incidence` AS `trial_disease_incidence`,`pick_a_mix`.`trials`.`pest_incidence` AS `trial_pest_incidence`,`pick_a_mix`.`trials`.`soil_health` AS `trial_soil_health`,`pick_a_mix`.`trials`.`biodiversity` AS `trial_biodiversity`,cast(concat('[',group_concat(distinct json_object('id',`pick_a_mix`.`components`.`id`,'crop',`pick_a_mix`.`components`.`crop`,'variety',`pick_a_mix`.`components`.`variety`) separator ','),']') as json) AS `trial_components` from (((`pick_a_mix`.`trials` left join `pick_a_mix`.`plots` on((`pick_a_mix`.`plots`.`trial_id` = `pick_a_mix`.`trials`.`id`))) left join `pick_a_mix`.`plot_components` on((`pick_a_mix`.`plot_components`.`plot_id` = `pick_a_mix`.`plots`.`id`))) left join `pick_a_mix`.`components` on((`pick_a_mix`.`components`.`id` = `pick_a_mix`.`plot_components`.`component_id`))) group by `pick_a_mix`.`trials`.`id`"));
+        super(alias, null, aliased, parameters, DSL.comment("VIEW"), TableOptions.view("create view `view_trials` as select `pick_a_mix`.`trials`.`id` AS `trial_id`,`pick_a_mix`.`trials`.`name` AS `trial_name`,`pick_a_mix`.`trials`.`description` AS `trial_description`,`pick_a_mix`.`trials`.`latitude` AS `trial_latitude`,`pick_a_mix`.`trials`.`longitude` AS `trial_longitude`,`pick_a_mix`.`trials`.`created_on` AS `trial_created_on`,`pick_a_mix`.`trials`.`farm_management` AS `trial_farm_management`,`pick_a_mix`.`trials`.`weed_incidence` AS `trial_weed_incidence`,`pick_a_mix`.`trials`.`disease_incidence` AS `trial_disease_incidence`,`pick_a_mix`.`trials`.`pest_incidence` AS `trial_pest_incidence`,`pick_a_mix`.`trials`.`soil_health` AS `trial_soil_health`,`pick_a_mix`.`trials`.`biodiversity` AS `trial_biodiversity`,`pick_a_mix`.`trials`.`cpr` AS `trial_cpr`,cast(concat('[',group_concat(distinct json_object('id',`pick_a_mix`.`components`.`id`,'crop',`pick_a_mix`.`components`.`crop`,'variety',`pick_a_mix`.`components`.`variety`) separator ','),']') as json) AS `trial_components` from (((`pick_a_mix`.`trials` left join `pick_a_mix`.`plots` on((`pick_a_mix`.`plots`.`trial_id` = `pick_a_mix`.`trials`.`id`))) left join `pick_a_mix`.`plot_components` on((`pick_a_mix`.`plot_components`.`plot_id` = `pick_a_mix`.`plots`.`id`))) left join `pick_a_mix`.`components` on((`pick_a_mix`.`components`.`id` = `pick_a_mix`.`plot_components`.`component_id`))) group by `pick_a_mix`.`trials`.`id`"));
     }
 
     /**
@@ -171,12 +176,12 @@ public class ViewTrials extends TableImpl<ViewTrialsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row13 type methods
+    // Row14 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row13<Integer, String, String, Double, Double, Timestamp, String, String, String, String, String, String, Components[]> fieldsRow() {
-        return (Row13) super.fieldsRow();
+    public Row14<Integer, String, String, Double, Double, Timestamp, String, String, String, String, String, String, Double, Components[]> fieldsRow() {
+        return (Row14) super.fieldsRow();
     }
     // @formatter:on
 }

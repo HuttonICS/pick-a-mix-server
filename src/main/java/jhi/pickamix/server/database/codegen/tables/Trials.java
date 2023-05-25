@@ -12,7 +12,7 @@ import jhi.pickamix.server.database.codegen.tables.records.TrialsRecord;
 import org.jooq.Field;
 import org.jooq.Identity;
 import org.jooq.Name;
-import org.jooq.Row15;
+import org.jooq.Row16;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -112,6 +112,11 @@ public class Trials extends TableImpl<TrialsRecord> {
     public final TableField<TrialsRecord, String> BIODIVERSITY = createField(DSL.name("biodiversity"), SQLDataType.VARCHAR(255), this, "");
 
     /**
+     * The column <code>pickamix_db.trials.cpr</code>.
+     */
+    public final TableField<TrialsRecord, Double> CPR = createField(DSL.name("cpr"), SQLDataType.DOUBLE, this, "");
+
+    /**
      * The column <code>pickamix_db.trials.created_on</code>.
      */
     public final TableField<TrialsRecord, Timestamp> CREATED_ON = createField(DSL.name("created_on"), SQLDataType.TIMESTAMP(0).nullable(false).defaultValue(DSL.field("CURRENT_TIMESTAMP", SQLDataType.TIMESTAMP)), this, "");
@@ -192,12 +197,12 @@ public class Trials extends TableImpl<TrialsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row15 type methods
+    // Row16 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row15<Integer, String, String, String, String, Double, Double, String, String, String, String, String, String, Timestamp, Timestamp> fieldsRow() {
-        return (Row15) super.fieldsRow();
+    public Row16<Integer, String, String, String, String, Double, Double, String, String, String, String, String, String, Double, Timestamp, Timestamp> fieldsRow() {
+        return (Row16) super.fieldsRow();
     }
     // @formatter:on
 }

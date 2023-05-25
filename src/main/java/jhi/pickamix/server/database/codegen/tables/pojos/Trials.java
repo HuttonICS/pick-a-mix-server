@@ -36,6 +36,7 @@ public class Trials implements Serializable {
     private String    pestIncidence;
     private String    soilHealth;
     private String    biodiversity;
+    private Double    cpr;
     private Timestamp createdOn;
     private Timestamp updatedOn;
 
@@ -55,6 +56,7 @@ public class Trials implements Serializable {
         this.pestIncidence = value.pestIncidence;
         this.soilHealth = value.soilHealth;
         this.biodiversity = value.biodiversity;
+        this.cpr = value.cpr;
         this.createdOn = value.createdOn;
         this.updatedOn = value.updatedOn;
     }
@@ -73,6 +75,7 @@ public class Trials implements Serializable {
         String    pestIncidence,
         String    soilHealth,
         String    biodiversity,
+        Double    cpr,
         Timestamp createdOn,
         Timestamp updatedOn
     ) {
@@ -89,6 +92,7 @@ public class Trials implements Serializable {
         this.pestIncidence = pestIncidence;
         this.soilHealth = soilHealth;
         this.biodiversity = biodiversity;
+        this.cpr = cpr;
         this.createdOn = createdOn;
         this.updatedOn = updatedOn;
     }
@@ -110,6 +114,7 @@ public class Trials implements Serializable {
         sb.append(", ").append(pestIncidence);
         sb.append(", ").append(soilHealth);
         sb.append(", ").append(biodiversity);
+        sb.append(", ").append(cpr);
         sb.append(", ").append(createdOn);
         sb.append(", ").append(updatedOn);
 
