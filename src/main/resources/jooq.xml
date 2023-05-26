@@ -31,6 +31,12 @@
 					<types>.*</types>
 					<userType>jhi.pickamix.server.database.codegen.tables.pojos.Components[]</userType>
 				</forcedType>
+				<forcedType>
+					<binding>jhi.pickamix.server.database.binding.TrialMeasureBinding</binding>
+					<expression>.*(view_trials)\.(trial_measures)</expression>
+					<types>.*</types>
+					<userType>jhi.pickamix.server.pojo.TrialMeasure[]</userType>
+				</forcedType>
 			</forcedTypes>
 		</database>
 

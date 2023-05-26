@@ -20,6 +20,7 @@ import static jhi.pickamix.server.database.codegen.tables.Measures.MEASURES;
 import static jhi.pickamix.server.database.codegen.tables.PlotComponents.PLOT_COMPONENTS;
 import static jhi.pickamix.server.database.codegen.tables.PlotMeasures.PLOT_MEASURES;
 import static jhi.pickamix.server.database.codegen.tables.Plots.PLOTS;
+import static jhi.pickamix.server.database.codegen.tables.TrialMeasures.TRIAL_MEASURES;
 import static jhi.pickamix.server.database.codegen.tables.Trials.TRIALS;
 
 public class SpreadsheetImporter
@@ -117,12 +118,23 @@ public class SpreadsheetImporter
 						trial.setCreatedOn(new Timestamp(submissionDate.getTime()));
 						trial.store();
 
-						// Add the plot that contains the mixture
-						PlotsRecord overallPlot = context.newRecord(PLOTS);
-						overallPlot.setMeasurementType(PlotsMeasurementType.mix);
-						overallPlot.setTrialId(trial.getId());
-						overallPlot.setCreatedOn(new Timestamp(submissionDate.getTime()));
-						overallPlot.store();
+						Date harvestDate = getDate(row.getCell(hm.get("Harvest Date - mixture " + componentCount + " components")));
+						String cropPurpose = getOptional(row.getCell(hm.get("What are you growing this crop for? Mixture " + componentCount + " components")));
+						String tillage = getOptional(row.getCell(hm.get("Tillage - mixture " + componentCount + " components")));
+						String fertiliser = getOptional(row.getCell(hm.get("Fertiliser, if quantity is known please put total NPK in \"other\" - mixture " + componentCount + " components.")));
+						String weedControl = getOptional(row.getCell(hm.get("Have you applied chemicals for Weed Control - mixture " + componentCount + " components.")));
+						String insectControl = getOptional(row.getCell(hm.get("Have you applied chemicals for Insect Control - mixture " + componentCount + " components.")));
+						String diseaseControl = getOptional(row.getCell(hm.get("Have you applied chemicals for Disease Control - mixture " + componentCount + " components.")));
+						Double yield = getDouble(row.getCell(hm.get("Total mixture yield t/ha - " + componentCount + " components")));
+
+						writeTrialMeasureDate(context, trial, dbMeasures.get("Harvest date"), harvestDate);
+						writeTrialMeasure(context, trial, dbMeasures.get("Crop purpose"), cropPurpose);
+						writeTrialMeasure(context, trial, dbMeasures.get("Tillage"), tillage);
+						writeTrialMeasure(context, trial, dbMeasures.get("Fertiliser"), fertiliser);
+						writeTrialMeasure(context, trial, dbMeasures.get("Weed control"), weedControl);
+						writeTrialMeasure(context, trial, dbMeasures.get("Insect control"), insectControl);
+						writeTrialMeasure(context, trial, dbMeasures.get("Disease control"), diseaseControl);
+						writeTrialMeasureDouble(context, trial, dbMeasures.get("Yield (t/ha)"), yield);
 
 						double denominator = 0;
 						int validCount = 0;
@@ -167,14 +179,9 @@ public class SpreadsheetImporter
 							pc.setComponentId(componentsRecord.getId());
 							pc.store();
 
-							pc = context.newRecord(PLOT_COMPONENTS);
-							pc.setPlotId(overallPlot.getId());
-							pc.setComponentId(componentsRecord.getId());
-							pc.store();
-
 							Date sowingDateMono = getDate(row.getCell(hm.get("Sowing Date - component " + comp + " of " + componentCount)));
 							Date harvestDateMono = getDate(row.getCell(hm.get("Harvest Date - component " + comp + " of " + componentCount)));
-							String cropPurpose = getOptional(row.getCell(hm.get("What are you growing this crop for? Component " + comp + " of " + componentCount)));
+							cropPurpose = getOptional(row.getCell(hm.get("What are you growing this crop for? Component " + comp + " of " + componentCount)));
 							Date sowingDateMix = getDate(row.getCell(hm.get("Sowing Date - mixture - " + comp + " of " + componentCount + " components")));
 							Double sowingRateMono = getDouble(row.getCell(hm.get("Monoculture - sowing rate kg/ha - component " + comp + " of " + componentCount)));
 							Double sowingRateMix = getDouble(row.getCell(hm.get("Mixture - sowing rate kg/ha - component " + comp + " of " + componentCount)));
@@ -210,28 +217,10 @@ public class SpreadsheetImporter
 							writePlotMeasureDouble(context, mixPlot, dbMeasures.get("Yield (t/ha)"), yieldMix);
 						}
 
-						Date harvestDate = getDate(row.getCell(hm.get("Harvest Date - mixture " + componentCount + " components")));
-						String cropPurpose = getOptional(row.getCell(hm.get("What are you growing this crop for? Mixture " + componentCount + " components")));
-						String tillage = getOptional(row.getCell(hm.get("Tillage - mixture " + componentCount + " components")));
-						String fertiliser = getOptional(row.getCell(hm.get("Fertiliser, if quantity is known please put total NPK in \"other\" - mixture " + componentCount + " components.")));
-						String weedControl = getOptional(row.getCell(hm.get("Have you applied chemicals for Weed Control - mixture " + componentCount + " components.")));
-						String insectControl = getOptional(row.getCell(hm.get("Have you applied chemicals for Insect Control - mixture " + componentCount + " components.")));
-						String diseaseControl = getOptional(row.getCell(hm.get("Have you applied chemicals for Disease Control - mixture " + componentCount + " components.")));
-						Double yield = getDouble(row.getCell(hm.get("Total mixture yield t/ha - " + componentCount + " components")));
-
 						if (yield != null && denominator != 0 && validCount == componentCount) {
 							trial.setCpr(yield / denominator);
 							trial.store(TRIALS.CPR);
 						}
-
-						writePlotMeasureDate(context, overallPlot, dbMeasures.get("Harvest date"), harvestDate);
-						writePlotMeasure(context, overallPlot, dbMeasures.get("Crop purpose"), cropPurpose);
-						writePlotMeasure(context, overallPlot, dbMeasures.get("Tillage"), tillage);
-						writePlotMeasure(context, overallPlot, dbMeasures.get("Fertiliser"), fertiliser);
-						writePlotMeasure(context, overallPlot, dbMeasures.get("Weed control"), weedControl);
-						writePlotMeasure(context, overallPlot, dbMeasures.get("Insect control"), insectControl);
-						writePlotMeasure(context, overallPlot, dbMeasures.get("Disease control"), diseaseControl);
-						writePlotMeasureDouble(context, overallPlot, dbMeasures.get("Yield (t/ha)"), yield);
 					}
 				}
 			}
@@ -244,6 +233,19 @@ public class SpreadsheetImporter
 		{
 			PlotMeasuresRecord pm = context.newRecord(PLOT_MEASURES);
 			pm.setPlotId(plot.getId());
+			pm.setMeasureId(measure.getId());
+			pm.setValue(Double.toString(value));
+			pm.setCreatedOn(new Timestamp(System.currentTimeMillis()));
+			pm.store();
+		}
+	}
+
+	private void writeTrialMeasureDouble(DSLContext context, TrialsRecord trial, MeasuresRecord measure, Double value)
+	{
+		if (value != null)
+		{
+			TrialMeasuresRecord pm = context.newRecord(TRIAL_MEASURES);
+			pm.setTrialId(trial.getId());
 			pm.setMeasureId(measure.getId());
 			pm.setValue(Double.toString(value));
 			pm.setCreatedOn(new Timestamp(System.currentTimeMillis()));
@@ -264,12 +266,38 @@ public class SpreadsheetImporter
 		}
 	}
 
+	private void writeTrialMeasure(DSLContext context, TrialsRecord trial, MeasuresRecord measure, String value)
+	{
+		if (!StringUtils.isBlank(value))
+		{
+			TrialMeasuresRecord pm = context.newRecord(TRIAL_MEASURES);
+			pm.setTrialId(trial.getId());
+			pm.setMeasureId(measure.getId());
+			pm.setValue(value);
+			pm.setCreatedOn(new Timestamp(System.currentTimeMillis()));
+			pm.store();
+		}
+	}
+
 	private void writePlotMeasureDate(DSLContext context, PlotsRecord plot, MeasuresRecord measure, Date value)
 	{
 		if (value != null)
 		{
 			PlotMeasuresRecord pm = context.newRecord(PLOT_MEASURES);
 			pm.setPlotId(plot.getId());
+			pm.setMeasureId(measure.getId());
+			pm.setValue(sdfDatabase.format(value));
+			pm.setCreatedOn(new Timestamp(System.currentTimeMillis()));
+			pm.store();
+		}
+	}
+
+	private void writeTrialMeasureDate(DSLContext context, TrialsRecord trial, MeasuresRecord measure, Date value)
+	{
+		if (value != null)
+		{
+			TrialMeasuresRecord pm = context.newRecord(TRIAL_MEASURES);
+			pm.setTrialId(trial.getId());
 			pm.setMeasureId(measure.getId());
 			pm.setValue(sdfDatabase.format(value));
 			pm.setCreatedOn(new Timestamp(System.currentTimeMillis()));

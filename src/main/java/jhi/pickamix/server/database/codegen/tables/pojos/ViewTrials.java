@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
+import jhi.pickamix.server.pojo.TrialMeasure;
+
 
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -24,20 +26,21 @@ public class ViewTrials implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer      trialId;
-    private String       trialName;
-    private String       trialDescription;
-    private Double       trialLatitude;
-    private Double       trialLongitude;
-    private Timestamp    trialCreatedOn;
-    private String       trialFarmManagement;
-    private String       trialWeedIncidence;
-    private String       trialDiseaseIncidence;
-    private String       trialPestIncidence;
-    private String       trialSoilHealth;
-    private String       trialBiodiversity;
-    private Double       trialCpr;
-    private Components[] trialComponents;
+    private Integer        trialId;
+    private String         trialName;
+    private String         trialDescription;
+    private Double         trialLatitude;
+    private Double         trialLongitude;
+    private Timestamp      trialCreatedOn;
+    private String         trialFarmManagement;
+    private String         trialWeedIncidence;
+    private String         trialDiseaseIncidence;
+    private String         trialPestIncidence;
+    private String         trialSoilHealth;
+    private String         trialBiodiversity;
+    private Double         trialCpr;
+    private Components[]   trialComponents;
+    private TrialMeasure[] trialMeasures;
 
     public ViewTrials() {}
 
@@ -56,23 +59,25 @@ public class ViewTrials implements Serializable {
         this.trialBiodiversity = value.trialBiodiversity;
         this.trialCpr = value.trialCpr;
         this.trialComponents = value.trialComponents;
+        this.trialMeasures = value.trialMeasures;
     }
 
     public ViewTrials(
-        Integer      trialId,
-        String       trialName,
-        String       trialDescription,
-        Double       trialLatitude,
-        Double       trialLongitude,
-        Timestamp    trialCreatedOn,
-        String       trialFarmManagement,
-        String       trialWeedIncidence,
-        String       trialDiseaseIncidence,
-        String       trialPestIncidence,
-        String       trialSoilHealth,
-        String       trialBiodiversity,
-        Double       trialCpr,
-        Components[] trialComponents
+        Integer        trialId,
+        String         trialName,
+        String         trialDescription,
+        Double         trialLatitude,
+        Double         trialLongitude,
+        Timestamp      trialCreatedOn,
+        String         trialFarmManagement,
+        String         trialWeedIncidence,
+        String         trialDiseaseIncidence,
+        String         trialPestIncidence,
+        String         trialSoilHealth,
+        String         trialBiodiversity,
+        Double         trialCpr,
+        Components[]   trialComponents,
+        TrialMeasure[] trialMeasures
     ) {
         this.trialId = trialId;
         this.trialName = trialName;
@@ -88,6 +93,7 @@ public class ViewTrials implements Serializable {
         this.trialBiodiversity = trialBiodiversity;
         this.trialCpr = trialCpr;
         this.trialComponents = trialComponents;
+        this.trialMeasures = trialMeasures;
     }
 
     @Override
@@ -108,6 +114,7 @@ public class ViewTrials implements Serializable {
         sb.append(", ").append(trialBiodiversity);
         sb.append(", ").append(trialCpr);
         sb.append(", ").append(Arrays.toString(trialComponents));
+        sb.append(", ").append(Arrays.toString(trialMeasures));
 
         sb.append(")");
         return sb.toString();

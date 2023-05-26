@@ -1,3 +1,5 @@
+# noinspection SqlNoDataSourceInspectionForFile
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -104,6 +106,28 @@ CREATE TABLE `plots`  (
 
 -- ----------------------------
 -- Records of plots
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for trial_measures
+-- ----------------------------
+DROP TABLE IF EXISTS `trial_measures`;
+CREATE TABLE `trial_measures`  (
+                                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                                  `trial_id` int(11) NOT NULL,
+                                  `measure_id` int(11) NOT NULL,
+                                  `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                  `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                  `updated_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                  PRIMARY KEY (`id`) USING BTREE,
+                                  INDEX `trial_id`(`trial_id`) USING BTREE,
+                                  INDEX `measure_id`(`measure_id`) USING BTREE,
+                                  CONSTRAINT `trial_measures_ibfk_1` FOREIGN KEY (`trial_id`) REFERENCES `trials` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                                  CONSTRAINT `trial_measures_ibfk_2` FOREIGN KEY (`measure_id`) REFERENCES `measures` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of trial_measures
 -- ----------------------------
 
 -- ----------------------------

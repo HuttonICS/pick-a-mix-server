@@ -12,6 +12,7 @@ import jhi.pickamix.server.database.codegen.tables.Measures;
 import jhi.pickamix.server.database.codegen.tables.PlotComponents;
 import jhi.pickamix.server.database.codegen.tables.PlotMeasures;
 import jhi.pickamix.server.database.codegen.tables.Plots;
+import jhi.pickamix.server.database.codegen.tables.TrialMeasures;
 import jhi.pickamix.server.database.codegen.tables.Trials;
 import jhi.pickamix.server.database.codegen.tables.ViewTrialComponentMeasures;
 import jhi.pickamix.server.database.codegen.tables.ViewTrials;
@@ -56,6 +57,7 @@ public class PickamixDb extends SchemaImpl {
             PlotComponents.PLOT_COMPONENTS,
             PlotMeasures.PLOT_MEASURES,
             Plots.PLOTS,
+            TrialMeasures.TRIAL_MEASURES,
             Trials.TRIALS,
             ViewTrialComponentMeasures.VIEW_TRIAL_COMPONENT_MEASURES,
             ViewTrials.VIEW_TRIALS
