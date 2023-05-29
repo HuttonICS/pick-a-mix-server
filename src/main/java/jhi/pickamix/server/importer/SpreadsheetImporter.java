@@ -3,6 +3,8 @@ package jhi.pickamix.server.importer;
 import jhi.pickamix.server.database.Database;
 import jhi.pickamix.server.database.codegen.enums.PlotsMeasurementType;
 import jhi.pickamix.server.database.codegen.tables.records.*;
+import lombok.*;
+import lombok.experimental.Accessors;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jooq.DSLContext;
@@ -136,8 +138,7 @@ public class SpreadsheetImporter
 						writeTrialMeasure(context, trial, dbMeasures.get("Disease control"), diseaseControl);
 						writeTrialMeasureDouble(context, trial, dbMeasures.get("Yield (t/ha)"), yield);
 
-						double denominator = 0;
-						int validCount = 0;
+						List<CPRData> cprData = new ArrayList<>();
 
 						for (int comp = 1; comp <= componentCount; comp++)
 						{
@@ -195,9 +196,12 @@ public class SpreadsheetImporter
 							Double yieldMono = getDouble(row.getCell(hm.get("Monoculture yield t/ha - component " + comp + " of " + componentCount)));
 							Double yieldMix = getDouble(row.getCell(hm.get("Mixture yield - t/ha- component " + comp + " of " + componentCount)));
 
-							if (yieldMono != null && sowingRateMix != null && sowingRateMono != null) {
-								validCount++;
-								denominator += (sowingRateMix / sowingRateMono) * yieldMono;
+							if (sowingRateMix != null && sowingRateMono != null && yieldMono != null) {
+								cprData.add(new CPRData()
+										.setSowingRateMono(sowingRateMono)
+										.setSowingRateMix(sowingRateMix)
+										.setYieldMono(yieldMono)
+										.setYieldMix(yieldMix));
 							}
 
 							writePlotMeasureDate(context, monoPlot, dbMeasures.get("Sowing date"), sowingDateMono);
@@ -217,9 +221,33 @@ public class SpreadsheetImporter
 							writePlotMeasureDouble(context, mixPlot, dbMeasures.get("Yield (t/ha)"), yieldMix);
 						}
 
-						if (yield != null && denominator != 0 && validCount == componentCount) {
-							trial.setCpr(yield / denominator);
-							trial.store(TRIALS.CPR);
+						if (cprData.size() == componentCount) {
+							Double numerator = 0d;
+							double denominator = 0;
+							boolean isIndividualYield = true;
+
+							double sowingRateMixTotal = 0;
+							for (CPRData d : cprData) {
+								sowingRateMixTotal += d.getSowingRateMix();
+							}
+
+							for (CPRData d : cprData) {
+								if (d.yieldMix != null && isIndividualYield)
+									numerator += d.yieldMix;
+								else
+								{
+									isIndividualYield = false;
+									numerator = yield;
+								}
+
+								denominator += (d.sowingRateMix / sowingRateMixTotal) * d.yieldMono;
+							}
+
+							if (numerator != null && numerator != 0 && denominator != 0)
+							{
+								trial.setCpr(numerator / denominator);
+								trial.store(TRIALS.CPR);
+							}
 						}
 					}
 				}
@@ -410,5 +438,18 @@ public class SpreadsheetImporter
 		{
 			return null;
 		}
+	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@Accessors(chain = true)
+	@ToString
+	private static class CPRData
+	{
+		private Double sowingRateMono;
+		private Double sowingRateMix;
+		private Double yieldMono;
+		private Double yieldMix;
 	}
 }
