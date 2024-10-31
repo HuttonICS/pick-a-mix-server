@@ -2,6 +2,7 @@ package jhi.pickamix.server.util;
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebListener;
+import jhi.pickamix.server.util.spreadsheet.DatabaseUpdaterRunnable;
 
 import java.util.concurrent.*;
 
@@ -23,6 +24,8 @@ public class ApplicationListener implements ServletContextListener
 		PropertyWatcher.initialize();
 
 		backgroundScheduler = Executors.newSingleThreadScheduledExecutor();
+		// Run the importer at least once a day. It will also be triggered by form submissions
+		backgroundScheduler.scheduleAtFixedRate(new DatabaseUpdaterRunnable(), 1, 1440, TimeUnit.MINUTES);
 	}
 
 	@Override
